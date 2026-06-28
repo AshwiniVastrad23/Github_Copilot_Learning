@@ -8,11 +8,15 @@ from app import app, activities
 
 
 def test_unregister_participant_removes_email_from_activity():
-    activities["Chess Club"]["participants"] = ["michael@mergington.edu", "daniel@mergington.edu"]
+    # Arrange
+    activity_name = "Chess Club"
+    email = "daniel@mergington.edu"
 
     with TestClient(app) as client:
-        response = client.delete("/activities/Chess Club/signup", params={"email": "daniel@mergington.edu"})
+        # Act
+        response = client.delete(f"/activities/{activity_name}/signup", params={"email": email})
 
+    # Assert
     assert response.status_code == 200
-    assert "daniel@mergington.edu" not in activities["Chess Club"]["participants"]
-    assert "michael@mergington.edu" in activities["Chess Club"]["participants"]
+    assert email not in activities[activity_name]["participants"]
+    assert "michael@mergington.edu" in activities[activity_name]["participants"]
